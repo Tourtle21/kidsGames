@@ -1,0 +1,35 @@
+.rock {
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  background: url("./images/rock.png");
+  background-size: 100%;
+  left: 0;
+}
+.hide {
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  background: url("./images/rock.png");
+  background-size: 100%;
+  left: 0;
+  background-color: blue;
+}
+body {
+  overflow: hidden;
+}
+#character {
+  position: absolute;
+  height: 47px;
+  width: 70px;
+  background: url("./images/hero.png");
+  background-position: -15px 46px;
+  /*background-color: blue;*/
+}
+#bad {
+  position: absolute;
+  height: 51px;
+  width: 49px;
+  background: url("./images/bad.png");
+  background-position: 86px -49px;
+}
