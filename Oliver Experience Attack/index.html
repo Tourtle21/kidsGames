@@ -8,8 +8,11 @@
   <link href="style.css" rel="stylesheet">
 </head>
 <body>
+  <div id="lightning"></div>
+  <div id="money"></div>
   <div id="game">
-    <progress id="power" value="0" max="100"></progress>
+    <div id="arrow"><div id="square"></div><div id="triangle"></div></div>
+    <div id="cloud"><div id="smallCloud"></div><div id="bigCloud"></div><div id="mainCloud"><div id="amountOfLightningBolts"></div></div></div>
     <div id="castle"></div>
     <div id="window"></div>
     <div id="block"></div>
@@ -25,6 +28,22 @@
         <div id="sheild"></div>
       </div>
     </div>
+  </div>
+  <div id="upgrade">
+    <div id="size"><p>Rock Size $50</p></div>
+    <div><progress id="speed" value="0" max="100"></progress><p>Load Speed $25</p></div>
+    <div id="storeLightning">
+      <p>Amount of Lightning Bolts $100</p>
+      <svg width="100px" height="200px" viewBox="0 0 100 150">
+        <polygon stroke="gray" fill="yellow" points="100,0 67,50 90,45 47,100 70,95 0,150 27,110 12,113 50,70 30,73 100,0" />
+      </svg>
+    </div>
+    <div id="storeCloud"><p>Cloud Speed 25$</p></div>
+    <div id="freezeRock"><p>Frozen Rock 100$</p></div>
+    <div id="fireRock"><p>Fire Rock 150$</p></div>
+    <div id="explodingRock"><p>Exploding Rock 200$</p></div>
+    <div id="lightningRock"><p>Lightning Rock 200$</p></div>
+    <div id="continue">Continue</div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="oliver.js"></script>
