@@ -37,7 +37,6 @@ $(".asteroid").eq(0).css("left", 145);
 $(".asteroid").eq(1).css("left", 203);
 $("body").append("<div id='spaceship2'></div>")
 document.addEventListener("keydown", function(e){
-  console.log(e.which)
   if (e.which == 39) {
     turnRight = true;
   }
@@ -102,7 +101,6 @@ var game = setInterval(function() {
   else {
     var cap = 0;
   }
-  console.log(cap)
   for (var j = 0; j < $(".asteroid").length; j++) {
     for (var i = 0; i < $(".bullet").length + cap; i++) {
       if ($(".bullet").length == i && $("#spaceship").length > 0) {
@@ -177,7 +175,7 @@ var game = setInterval(function() {
     $(".asteroid").eq(i).css("top", $(".asteroid").eq(i).position().top + asteroiddy[i]);
   }
 
-  if ((shoot || shoot2)) {
+  if ((shoot || shoot2) && (shotspeed > 50 || shotspeed2 > 50)) {
     if (shoot && shotspeed > 50) {
       var getTop = x;
       var getBottom = y;
@@ -189,19 +187,24 @@ var game = setInterval(function() {
       var getSpeedx = dx2;
       var getSpeedy = dy2;
     }
-    var $bullet = "<div class='bullet'></div>"
-    $("body").append($bullet);
-    $(".bullet").eq(bulletdx.length).css("left", getTop + 20);
-    $(".bullet").eq(bulletdx.length).css("top", getBottom + 20);
-    bulletdx.push(getSpeedx);
-    bulletdy.push(getSpeedy);
-    if (shoot) {
-      bulletd.push(1);
-    } else {
-      bulletd.push(2)
+    if (getTop != undefined) {
+      var $bullet = "<div class='bullet'></div>"
+      $("body").append($bullet);
+      $(".bullet").eq(bulletdx.length).css("left", getTop + 20);
+      $(".bullet").eq(bulletdx.length).css("top", getBottom + 20);
+      bulletdx.push(getSpeedx);
+      bulletdy.push(getSpeedy);
+      if (shoot) {
+        bulletd.push(1);
+      } else {
+        bulletd.push(1)
+      }
+      if (shotspeed > 50 && shoot) {
+        shotspeed = 0;
+      } else{
+        shotspeed2 = 0;
+      }
     }
-
-    shotspeed = 0;
   }
   if (bulletdx.length > 0) {
     for (var i = 0; i < bulletdx.length; i++) {
@@ -231,6 +234,7 @@ var game = setInterval(function() {
     }
   }
   shotspeed += 1;
+  shotspeed2 += 1;
   if (turnRight) {
     degrees += 2;
     if (degrees <= 90) {
