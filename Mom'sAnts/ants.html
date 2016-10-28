@@ -1,0 +1,25 @@
+<html>
+<head>
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+  <div id="instructions"><p>Collect food with your ant, and store enough food to make it throughout the winter.
+    Use the left and right arrow keys/tap the screen for mobile to move your ant back and forth across the screen.
+    You need to avoid the rain, leaves, and snow and bring food from the right of the screen to the left before it becomes winter</p>
+    <button onClick="game()">Play</button>
+  </div>
+  <div id="game">
+    <div id="basket"><div id="filler"></div></div>
+    <div id="ant"></div>
+    <div class="raindrop"></div>
+    <div id="food"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="script.js"></script>
+  </div>
+  <div id="nextLevel">
+    <div id="level"></div>
+    <p id='message'>Good Job! You have gathered enough food to last through the winter</p>
+    <button id='button' onClick="unPause()">Next Level</button>
+  </div>
+</body>
+</html>
