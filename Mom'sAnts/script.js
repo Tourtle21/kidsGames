@@ -1,6 +1,10 @@
 var pause = false;
 var game;
+var restart;
+var otherRestart;
 function game() {
+  $("#button").unbind("click");
+  console.log("hi")
   $("#instructions").css("display", "none");
   $("#game").css("display", "block")
   $("#ant").css("width", $(window).width()/5)
@@ -66,7 +70,7 @@ function game() {
       left = false;
     }
   })
-  setInterval(function() {
+  restart = setInterval(function() {
     if (!pause) {
       if (chance > 1) {
         if (color == "silver") {
@@ -76,6 +80,8 @@ function game() {
           $(".rainDrop").remove();
           $("#message").text("Oh no! You didn't collect enough food for winter")
           $("#button").text("Restart");
+          clearInterval(restart);
+          clearInterval(otherRestart)
           $("#button").click(function() {
             game();
           })
@@ -138,9 +144,9 @@ function game() {
       $("#ant").css("top", y)
     }
   })
-  setInterval(function() {
+  otherRestart = setInterval(function() {
     if (!pause) {
-      chance += 0.002;
+      chance += 0.0002;
       for (var i = 0; i < $(".rainDrop").length; i++) {
         $(".rainDrop").eq(i).css("top", $(".rainDrop").eq(i).position().top + ($(window).height() / 200))
         if ($(".rainDrop").eq(i).position().top + $(".rainDrop").width() > $(window).height() - $("#ant").height() && $(".rainDrop").eq(i).position().left + $(".rainDrop").width() > $("#ant").position().left && $(".rainDrop").eq(i).position().left < $("#ant").position().left + $("#ant").width()) {
