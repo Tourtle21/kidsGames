@@ -3,10 +3,12 @@ var game;
 var restart;
 var otherRestart;
 function game() {
+  $("#message").text("Good Job! You have gathered enough food to last through the winter");
+  $("#button").text("Next Level");
   $("#button").unbind("click");
   console.log("hi")
   $("#instructions").css("display", "none");
-  $("#game").css("display", "block")
+  $("#game").css("display", "block");
   $("#ant").css("width", $(window).width()/5)
   $("#ant").css("height", $(window).width()/10)
   var foodList = ["mushroom", "strawberry", "apple", "orange", "chicken", "pear", "tomatoe", "fish", "pepper", "cherry", "carrot", "eggplant", "banana", "raddish", "watermelon"]
@@ -18,14 +20,19 @@ function game() {
   var rainTime = 0;
   var carry = false;
   var filled = 0;
+  $("#filler").css("height", 0);
+  $("#filler").css("top", $("#basket").height());
   var chance = 0;
-  var color = "red"
-  var mainColor = "green"
+  var color = "url(images/leaves/leaf-01.svg)"
+  var type = 1;
+  var mainColor = "url(images/leaves/raindrop-01.svg)"
   var max = 100;
   var level = 1;
-  var amount = 100 / (level);
+  var score = 0;
+  $("#score").text("Score: " + score)
+  var amount = 100 / (level + 2);
   $("#ant").css("top", y);
-  document.addEventListener("mousedown", function(e) {
+  document.addEventListener("touchstart", function(e) {
     if (!carry) {
       right = true;
       left = false;
@@ -36,7 +43,7 @@ function game() {
       $("#ant").css("transform", "scaleX(-1)")
     }
   })
-  document.addEventListener("mouseup", function(e) {
+  document.addEventListener("touchend", function(e) {
     if (!carry) {
       right = false;
       left = false;
@@ -73,13 +80,14 @@ function game() {
   restart = setInterval(function() {
     if (!pause) {
       if (chance > 1) {
-        if (color == "silver") {
+        if (color == "url(images/snowflakes/snowflake-01.svg)") {
           pause = true;
           $("#game").hide();
           $("#nextLevel").show();
           $(".rainDrop").remove();
           $("#message").text("Oh no! You didn't collect enough food for winter")
           $("#button").text("Restart");
+          filled = 0;
           clearInterval(restart);
           clearInterval(otherRestart)
           $("#button").click(function() {
@@ -88,7 +96,7 @@ function game() {
         }
         chance = 0;
         mainColor = color;
-        color = "silver";
+        color = "url(images/snowflakes/snowflake-01.svg)";
       }
       $("#ant").css("width", $(window).width()/10)
       $("#ant").css("height", $(window).width()/20)
@@ -115,18 +123,24 @@ function game() {
         carry = true;
         right = false;
       }
-      if (filled == 100) {
+      if (filled >= 100) {
         $("#filler").css("height", 0);
         $("#filler").css("top", $("#basket").height());
         filled = 0;
         level += 1;
-        amount = 100 / (level);
+        amount = 100 / (level + 2);
         pause = true;
+        chance = 0;
+        color = "url(images/leaves/leaf-01.svg)";
+        mainColor = "url(images/leaves/raindrop-01.svg)"
         $("#game").hide();
+        $("#button").text("Start Level " + level)
         $("#nextLevel").show();
         $(".rainDrop").remove();
       }
       if (x <= 0 && carry) {
+        score += 1;
+        $("#score").text("Score: " + score);
         carry = false;
         left = false;
         $("#food").css("top", $(window).height() - $("#food").width());
@@ -151,6 +165,10 @@ function game() {
         $(".rainDrop").eq(i).css("top", $(".rainDrop").eq(i).position().top + ($(window).height() / 200))
         if ($(".rainDrop").eq(i).position().top + $(".rainDrop").width() > $(window).height() - $("#ant").height() && $(".rainDrop").eq(i).position().left + $(".rainDrop").width() > $("#ant").position().left && $(".rainDrop").eq(i).position().left < $("#ant").position().left + $("#ant").width()) {
           $(".rainDrop").eq(i).remove();
+          if (score > 0 && filled > 0) {
+            score -= 1;
+            $("#score").text("Score: " + score)
+          }
           if (filled > 0) {
             filled -= amount;
             $("#filler").css("height", filled);
@@ -171,9 +189,25 @@ function game() {
   function spawnRaindrop() {
     $("body").append("<div class='rainDrop'></div>")
     $rainDrop = $(".rainDrop").eq($(".rainDrop").length - 1)
-    $rainDrop.css("background", mainColor)
+    if (mainColor == "url(images/leaves/leaf-01.svg)" && Math.floor(Math.random() * 2 + 1) == 2) {
+      $rainDrop.css("background", "url(images/leaves/leaf-02.svg)")
+    } else {
+      $rainDrop.css("background", mainColor)
+
+    }
+    $rainDrop.css("background-size", "100% 100%")
     if (Math.random() < chance) {
-      $rainDrop.css("background", color)
+      if (color == "url(images/leaves/leaf-01.svg)") {
+        color = "url(images/leaves/leaf-0" + Math.floor(Math.random() * 2 + 1) + ".svg)"
+        $rainDrop.css("background", color)
+        $rainDrop.css("background-size", "100% 100%")
+        color = "url(images/leaves/leaf-01.svg)";
+      } else {
+        color = "url(images/snowflakes/snowflake-0" + Math.floor(Math.random() * 8 + 1) + ".svg)"
+        $rainDrop.css("background", color)
+        $rainDrop.css("background-size", "100% 100%")
+        color = "url(images/snowflakes/snowflake-01.svg)";
+      }
     }
     $rainDrop.css("top", -50);
     $rainDrop.css("left", 0 + Math.floor((Math.random() * ($(window).width() - 50))));

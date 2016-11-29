@@ -1,6 +1,6 @@
 body {
   overflow: hidden;
-  background: lightblue;
+  background: #c4ecf9;
 }
 #ant {
   height: 50px;
@@ -14,9 +14,9 @@ body {
   top: 50px;
   height: 50px;
   width: 50px;
-  background: lightblue;
-  border-radius: 0 50% 50% 50%;
+  background: "url(images/leaves/raindrop-01.svg)";
   position: absolute;
+  background-size: 100% 100%;
 }
 #food {
   position: absolute;
