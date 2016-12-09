@@ -5,18 +5,63 @@ var screenTop = 0;
 var screenBottom = window.innerHeight;
 var screenLeft = 0;
 var screenRight = window.innerWidth;
+var upArrow = false;
+var downArrow = false;
+var leftArrow = false;
+var rightArrow = false;
+var keys = [];
 document.addEventListener("keydown", function(e) {
+  key = e.which;
+  character = String.fromCharCode((96 <= key && key <= 105) ? key-48 : key)
+  keys.push(character);
+  console.log(e.which)
   if (e.which == 32){
     space = true;
   }
+  if (e.which == 37){
+    leftArrow = true;
+  }
+  if (e.which == 39){
+    rightArrow = true;
+  }
+  if (e.which == 40){
+    downArrow = true;
+  }
+  if (e.which == 38){
+    upArrow = true;
+  }
 })
+function pullOut(character) {
+  index = keys.indexOf(character)
+  keys.splice(index, 1);
+  if (keys.indexOf(character) > - 1) {
+    pullOut(character)
+  }
+
+}
 document.addEventListener("keyup", function(e) {
+  key = e.which;
+  character = String.fromCharCode((96 <= key && key <= 105) ? key-48 : key)
+  pullOut(character)
   if (e.which == 32){
     space = false;
+  }
+  if (e.which == 37){
+    leftArrow = false;
+  }
+  if (e.which == 39){
+    rightArrow = false;
+  }
+  if (e.which == 40){
+    downArrow = false;
+  }
+  if (e.which == 38){
+    upArrow = false;
   }
 })
 function setBackground(type) {
   document.getElementsByTagName("body")[0].style.background = type;
+  document.getElementsByTagName("body")[0].style.backgroundRepeat = "no-repeat";
   document.getElementsByTagName("body")[0].style.backgroundSize = "100% 100%";
 }
 function createCharacter(name, background, height, width, top, left) {
@@ -38,25 +83,34 @@ function loop(action, time) {
   }, time)
 }
 function move(object, direction, amount) {
+  console.log(document.getElementById(object).style.top.slice(0, -2) + amount)
   if (direction == "down") {
-    document.getElementById(object).style.top = character.bird.top + 1 + "px";
-    character.bird.top += amount;
+    document.getElementById(object).style.top = parseInt(document.getElementById(object).style.top.slice(0, -2)) + amount + "px";
   }
   if (direction == "up") {
-    document.getElementById(object).style.top = character.bird.top - 1 + "px";
-    character.bird.top -= amount;
+    document.getElementById(object).style.top = document.getElementById(object).style.top.slice(0, -2) - amount + "px";
   }
   if (direction == "left") {
-    document.getElementById(object).style.left = character.bird.left - 1 + "px";
-    character.bird.left -= amount;
+    document.getElementById(object).style.left = parseInt(document.getElementById(object).style.left.slice(0, -2)) - amount + "px";
   }
   if (direction == "right") {
-    document.getElementById(object).style.left = character.bird.left + 1 + "px";
-    character.bird.left += amount;
+    document.getElementById(object).style.left = parseInt(document.getElementById(object).style.left.slice(0, -2)) + amount + "px";
   }
 }
 function spacePressed() {
   return space;
+}
+function rightPressed() {
+  return rightArrow;
+}
+function leftPressed() {
+  return leftArrow;
+}
+function downPressed() {
+  return downArrow;
+}
+function upPressed() {
+  return upArrow;
 }
 function moveObjects(name, direction, amount) {
   if (document.getElementsByClassName(name).length != 0) {
@@ -96,7 +150,6 @@ function createObjects(name, background, height, width, top, left) {
 }
 function objectWithCharacter(name1, name2, number) {
   if (number != "all") {
-    console.log("!all")
     firstTop = parseInt(document.getElementById(name1).style.top.slice(0, -2));
     firstLeft = parseInt(document.getElementById(name1).style.left.slice(0, -2));
     secondTop = parseInt(document.getElementsByClassName(name2)[number].style.top.slice(0, -2));
@@ -109,7 +162,6 @@ function objectWithCharacter(name1, name2, number) {
       return number
     }
   }else {
-    console.log("all")
     for (i = 0; i < document.getElementsByClassName(name2).length; i++) {
       firstTop = parseInt(document.getElementById(name1).style.top.slice(0, -2));
       firstLeft = parseInt(document.getElementById(name1).style.left.slice(0, -2));
@@ -147,6 +199,16 @@ function getPositionLeft(name, number) {
   } else {
     return parseInt(document.getElementsByClassName(name)[number].style.left.slice(0, -2));
   }
+}
+function checkKey(key) {
+  return keys.indexOf(key.toUpperCase()) > -1;
+}
+function changeColor(name, color) {
+  console.log(document.getElementById(name))
+  document.getElementById(name).style.backgroundColor = color;
+}
+function checkColor(name) {
+  return document.getElementById(name).style.backgroundColor;
 }
 //setBackground is used setBackground("black") or setBackground("url(chicken.png)")
 //createCharacter is used for only creating one person or object Ex: createCharacter(name, background, height, width, how far from the top, and left);
