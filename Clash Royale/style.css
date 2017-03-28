@@ -1,0 +1,50 @@
+#gameBoard {
+  position: absolute;
+  display: block;
+  height: 100%;
+  width: 43%;
+  top: -135px;
+  background: url(https://s-media-cache-ak0.pinimg.com/236x/d3/68/b8/d368b82bfa3acd293848a1b9eede86ea.jpg);
+  background-size: 100% 116%;
+  left: 29%;
+}
+#cardDeck {
+  position: absolute;
+  display: block;
+  height: 16%;
+  width: 43%;
+  background: saddlebrown;
+  top: calc(100% - 16%);
+  left: 29%;
+}
+.card {
+  position: absolute;
+  display: block;
+  height: 97%;
+  width: 20%;
+  cursor: move;
+}
+#card1 {
+  background: url(images/giant.png);
+  background-size: 100% 100%;
+  top: 2px;
+  left: 4%;
+}
+#card2 {
+  background: url(images/bomber.png);
+  background-size: 100% 100%;
+  top: 2px;
+  left: 28%;
+}
+#card3 {
+  background: url(http://royaleclash.gamesrich.net/pic/executioner.png);
+  background-size: 100% 100%;
+  top: 2px;
+  left: 52%;
+}
+#card4 {
+  background: url(http://vignette3.wikia.nocookie.net/clashroyale/images/5/52/ZapCard.png/revision/latest/scale-to-width-down/200?cb=20160702201317);
+  background-size: 100% 100%;
+  top: 2px;
+  left: 76%;
+}
