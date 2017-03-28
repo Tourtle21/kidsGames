@@ -3,48 +3,53 @@
   display: block;
   height: 100%;
   width: 43%;
-  top: -135px;
+  top: -15%;
   background: url(https://s-media-cache-ak0.pinimg.com/236x/d3/68/b8/d368b82bfa3acd293848a1b9eede86ea.jpg);
   background-size: 100% 116%;
   left: 29%;
 }
 #cardDeck {
   position: absolute;
-  display: block;
   height: 16%;
   width: 43%;
   background: saddlebrown;
   top: calc(100% - 16%);
   left: 29%;
 }
+#handi {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  background: blue;
+  left: 5px;
+}
 .card {
   position: absolute;
-  display: block;
-  height: 97%;
-  width: 20%;
+  height: 15%;
+  width: 10%;
   cursor: move;
 }
 #card1 {
   background: url(images/giant.png);
   background-size: 100% 100%;
-  top: 2px;
-  left: 4%;
+  top: calc(100% - 16%);
+  left: 29%;
 }
 #card2 {
   background: url(images/bomber.png);
   background-size: 100% 100%;
-  top: 2px;
-  left: 28%;
+  top: calc(100% - 16%);
+  left: 40%;
 }
 #card3 {
-  background: url(http://royaleclash.gamesrich.net/pic/executioner.png);
+  background: url(images/executioner.png);
   background-size: 100% 100%;
-  top: 2px;
-  left: 52%;
+  top: calc(100% - 16%);
+  left: 50.5%;
 }
 #card4 {
-  background: url(http://vignette3.wikia.nocookie.net/clashroyale/images/5/52/ZapCard.png/revision/latest/scale-to-width-down/200?cb=20160702201317);
+  background: url(images/zap.png);
   background-size: 100% 100%;
-  top: 2px;
-  left: 76%;
+  top: calc(100% - 16%);
+  left: 61%;
 }
