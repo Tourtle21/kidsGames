@@ -1,0 +1,183 @@
+var React = require("react");
+var $ = require("jquery");
+var smash;
+var move;
+var difficulty = 0;
+var score = 0;
+var keypresses;
+var hashHistory = require("react-router").hashHistory
+var Smash = React.createClass({
+  componentWillUnmount: function() {
+    clearInterval(move);
+    clearInterval(smash);
+    document.removeEventListener("keypress", keypresses)
+  },
+  componentWillMount: function() {
+    var time = 50;
+    var overallTime = 0;
+    var words = [["css", "js", "html", "var", ".", "$", "#", "{", "}", "<", ">", ":", "/", "\\",],
+    ["!", "=", "%", "*", ";", "|", "+", "-", "&", "(", ")", "&lt;div&gt;", "&lt;p&gt;", "&lt;/div&gt;", "&lt;/p&gt;", "&lt;h1&gt;", "&lt;/h1&gt;", ".circle", "#footer", "&lt;img&gt;", "function", "document", "style", "body","css", "js", "html", "var", ".", "$", "#", "{", "}", "<", ">", ":", "/", "\\",],
+    ["!", "=", "%", "*", ";", "|", "+", "-", "&", "(", ")", "&lt;div&gt;", "&lt;p&gt;", "&lt;/div&gt;", "&lt;/p&gt;", "&lt;h1&gt;", "&lt;/h1&gt;", ".circle", "#footer", "&lt;img&gt;", "function", "document", "style", "body","css", "js", "html", "var", ".", "$", "#", "{", "}", "<", ">", ":", "/", "\\","document.getElementById","addEventListener","$('#character')", "#character&nbsp;{", "background-color:&nbsp;blue;", "&lt;div&gt;&lt;/div&gt;", "&lt;link&nbsp;rel='stylesheet'&gt;"]]
+    var needed = []
+    var indexes = [];
+    var spawnSpeed = 50;
+    var enemySpeed = 5;
+    keypresses = function(e) {
+      key = e.which
+      character = String.fromCharCode((96 <= key && key <= 105) ? key-48 : key)
+      switch(e.which) {
+        case 97:
+          character = "a";
+          break;
+        case 98:
+          character = "b";
+          break;
+        case 99:
+          character = "c";
+          break;
+        case 100:
+          character = "d";
+          break;
+        case 101:
+          character = "e";
+          break;
+        case 102:
+          character = "f";
+          break;
+        case 103:
+          character = "g";
+          break;
+        case 104:
+          character = "h";
+          break;
+        case 105:
+          character = "i";
+          break;
+      }
+      guys = $(".enemy");
+      amount = guys.length;
+      splices = [];
+      for (i = 0; i < amount; i++) {
+        if (needed[i].charAt(indexes[i]) == character) {
+          $(".right").eq(i).text($(".right").eq(i).text() + character)
+          indexes[i] += 1;
+          if (indexes[i] >= needed[i].length) {
+            splices.push(i);
+          }
+        }
+      }
+      for (i = 0; i < splices.length; i++) {
+        guys[splices[i]].remove();
+        score += 1;
+        $("#score").text("Score: " + score)
+        indexes.splice(splices[i] - i, 1);
+        needed.splice(splices[i] - i, 1);
+      }
+    }
+    document.addEventListener("keypress", keypresses);
+    clearInterval(move);
+    clearInterval(smash);
+    smash = setInterval(function() {
+      time += 1;
+      overallTime += 1
+      if (overallTime >= 100) {
+          spawnSpeed *= .7;
+          enemySpeed *= .9;
+          overallTime = 0;
+      }
+      if (time >= spawnSpeed) {
+        left = 0
+        posTop = 0
+        if (Math.random() > .5) {
+          posTop = parseInt($("#game").css("height").slice(0, -2)) * Math.random()
+          if (Math.random() > .5) {
+            left = parseInt($("#game").css("width").slice(0, -2))
+          }
+        } else {
+          left = parseInt($("#game").css("width").slice(0, -2)) * Math.random()
+          if (Math.random() > .5) {
+            posTop = parseInt($("#game").css("height").slice(0, -2))
+          }
+        }
+        word = Math.floor(Math.random() * words[difficulty].length)
+        if (words[difficulty][word].includes("&nbsp;")) {
+          index = words[difficulty][word].indexOf("&nbsp;")
+          words[difficulty][word] = (words[difficulty][word].slice(0, index) + " " + words[difficulty][word].slice(index + 6, words[difficulty][word].length))
+          if (words[difficulty][word].includes("&nbsp;")) {
+            index = words[difficulty][word].indexOf("&nbsp;")
+            words[difficulty][word] = (words[difficulty][word].slice(0))
+          }
+        }
+        if (words[difficulty][word].slice(0, 4) == "&lt;") {
+          if (words[difficulty][word].slice(0, 4) == "&lt;") {
+            console.log("TWO")
+          } else {
+              needed.push("<" +words[difficulty][word].slice(4, -4) + ">");
+          }
+          console.log(needed)
+        } else {
+          needed.push(words[difficulty][word]);
+        }
+        indexes.push(0)
+        $("#game").append("<div class='enemy' style='left: "+ left +"px; top: "+ posTop +"px;'><p class='smashText' >"+ words[difficulty][word] +"</p><span class='right'></span></div>")
+        time = 0;
+      }
+    }, 100)
+    move = setInterval(function() {
+      enemies = $(".enemy");
+      amount = enemies.length;
+      for (var i = 0; i < amount; i++) {
+        left = enemies.eq(i).position().left
+        posTop = enemies.eq(i).position().top;
+        x2 = left + 5;
+        x1 = $("#blaster").position().left + 25;
+        y2 = posTop + 5;
+        y1 = $("#blaster").position().top + 25;
+        distance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
+        if (distance < parseInt($("#blaster").css("width").slice(0, -2)) - 20) {
+          $("#blaster").remove();
+          $("#game").append("<div class='well' id='gameOver'>Practice some more and try again.</p><button id='again' class='btn btn-raised btn-success'>Play Again</button><button id='newPage' class='btn btn-raised btn-warning'>Practice</button></div>")
+          clearInterval(move);
+          clearInterval(smash);
+          $("#newPage").click(function() {
+            hashHistory.push("practicePage");
+          })
+          $("#again").click(function() {
+            score = 0;
+            hashHistory.push("/");
+            hashHistory.push("smash");
+          })
+        }
+        enemies.eq(i).css("left", left + (x1 - x2) / (distance * (enemySpeed)));
+        enemies.eq(i).css("top", posTop + (y1 - y2) / (distance * (enemySpeed)));
+      }
+    }, 10)
+
+  },
+  changeDifficulty: function(amount) {
+    difficulty = amount;
+    $(".enemy").remove();
+    score = 0;
+    $("#score").text("Score: " + score)
+    $("button").eq(amount + 1).blur();
+    this.componentWillUnmount();
+    this.componentWillMount();
+  },
+  render: function() {
+    return(
+      <div>
+        <div id="smash-buttons">
+          <button className="btn btn-raised btn-success" onClick={this.changeDifficulty.bind(null, 0)}>EASY</button>
+          <button className="btn btn-raised warning" onClick={this.changeDifficulty.bind(null, 1)}>MEDIUM</button>
+          <button className="btn btn-raised btn-danger" onClick={this.changeDifficulty.bind(null, 2)}>HARD</button>
+        </div>
+        <div id="game">
+          <div id='score'>Score: 0</div>
+          <div id="blaster"></div>
+        </div>
+      </div>
+    )
+  }
+})
+
+module.exports = Smash;
