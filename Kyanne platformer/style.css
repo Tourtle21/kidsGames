@@ -7,6 +7,9 @@
 body {
   overflow: hidden;
 }
+.door {
+  background: gold;
+}
 .platform {
   height: 10px;
   width: 50px;
@@ -19,4 +22,7 @@ body {
   width: 20px;
   background: green;
   position: absolute;
+}
+.end {
+  background: red;
 }

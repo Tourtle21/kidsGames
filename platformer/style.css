@@ -26,3 +26,18 @@ body {
 .end {
   background: red;
 }
+#prompt {
+  display: none;
+  position: absolute;
+  padding: 10px;
+  height: 200px;
+  width: 400px;
+  top: calc(50% - 100px);
+  left: calc(50% - 200px);
+  resize: none;
+  background: black;
+  color: green;
+}
+#prompt:focus {
+  outline: 0;
+}

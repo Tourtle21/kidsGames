@@ -9,78 +9,37 @@ var terminal = 10;
 var touching = false;
 var termIndex = -1;
 var running = true;
-var indexOfTop = -1;
-character = document.getElementById("character");
-character.style.left = 0;
-character.style.top = 0;
-character.style.width = "10px";
-character.style.height = "10px";
-
-document.getElementsByClassName("platform")[0].style.top = "0px";
-document.getElementsByClassName("platform")[0].style.left = "400px";
-document.getElementsByClassName("platform")[0].style.width = "10px";
-document.getElementsByClassName("platform")[0].style.height = window.innerHeight - 50 + "px";
-
-document.getElementsByClassName("platform")[1].style.top = window.innerHeight - 50 + "px";
-document.getElementsByClassName("platform")[1].style.left = "400px";
-document.getElementsByClassName("platform")[1].style.width = "10px";
-document.getElementsByClassName("platform")[1].style.height = "50px";
-document.getElementsByClassName("platform")[1].style.background = "gold";
-
-document.getElementsByClassName("end")[0].style.top = window.innerHeight - 50 + "px";
-document.getElementsByClassName("end")[0].style.left = window.innerWidth - 100 + "px";
-document.getElementsByClassName("end")[0].style.width = "40px";
-document.getElementsByClassName("end")[0].style.height = "50px";
-document.getElementsByClassName("end")[0].style.background = "red";
-document.getElementsByClassName("end")[0].style.position = "absolute";
-
-document.getElementsByClassName("terminal")[0].style.height = "10px";
-document.getElementsByClassName("terminal")[0].style.width = "10px";
-document.getElementsByClassName("terminal")[0].style.background = "black";
-document.getElementsByClassName("terminal")[0].style.position = "absolute";
-document.getElementsByClassName("terminal")[0].style.top = window.innerHeight - 10 + "px";
-document.getElementsByClassName("terminal")[0].style.left = "8px"
+var screenHeight = window.innerHeight;
+var screenWidth = window.innerWidth;
+var checkTopsOf = [];
+var indexOFTOP = -1;
 document.addEventListener("keydown", function(e) {
-    if (e.which == 68) {
+    if (e.key == "ArrowRight") {
         moveRight = true;
     }
-    if (e.which == 65) {
+    if (e.key == "ArrowLeft") {
         moveLeft = true;
     }
-    if (e.which == 87) {
+    if (e.key == "ArrowUp") {
         jump = true;
     }
     if (e.which == 13 && termIndex != -1) {
         running = !running
-        answer = openPrompt();
+        answer = prompt("What would you like to change?")
         calculateAnswer(answer);
+        running = true;
     }
 })
-function openPrompt() {
-  document.getElementById("prompt").style.display = "block"
-    resetCursor(document.getElementById("prompt"))
-
-}
-function resetCursor(txtElement) {
-    if (txtElement.setSelectionRange) {
-        txtElement.focus();
-        txtElement.setSelectionRange(1, 4);
-    } else if (txtElement.createTextRange) {
-        var range = txtElement.createTextRange();
-        range.moveStart('character', 0);
-        range.select();
-    }
-}
 document.addEventListener("keyup", function(e) {
-    if (e.which == 68) {
-        moveRight = false;
-    }
-    if (e.which == 65) {
-        moveLeft = false;
-    }
-    if (e.which == 87) {
-        jump = false;
-    }
+  if (e.key == "ArrowRight") {
+      moveRight = false;
+  }
+  if (e.key == "ArrowLeft") {
+      moveLeft = false;
+  }
+  if (e.key == "ArrowUp") {
+      jump = false;
+  }
 })
 calculateAnswer = function(answer) {
     parenthIndex = answer.indexOf("(")
@@ -109,8 +68,8 @@ movecharacter = function() {
         }
         newTop = newTop + fallingSpeed;
     }
-    if (newTop >= window.innerHeight - 10) {
-        newTop = window.innerHeight - 10;
+    if (newTop >= window.innerHeight - parsePos(character.style.height)) {
+        newTop = window.innerHeight - parsePos(character.style.height);
         falling = false;
         fallingSpeed = 0;
     }
@@ -141,9 +100,18 @@ movecharacter = function() {
                 character.style.top = coordinates[1] + "px";
                 fallingSpeed = -fallingSpeed
             }
-            if (posTop - newTop < 0) {
-                indexOfTop = coordinates[4];
-                character.style.top = coordinates[0] - 10 + "px";
+            else if (posTop - newTop < 0) {
+                for (i = 0; i < checkTopsOf.length; i++) {
+                  if (hasClass(document.getElementsByClassName("platform")[coordinates[4]], checkTopsOf[i])){
+                    for (j = 0; j < document.getElementsByClassName(checkTopsOf[i]).length; j++) {
+                      if (document.getElementsByClassName("platform")[coordinates[4]] == document.getElementsByClassName(checkTopsOf[i])[j]) {
+                          hitTop(checkTopsOf[i], j)
+                      }
+                    }
+                  }
+                }
+                indexOFTOP = coordinates[4];
+                character.style.top = coordinates[0] - parsePos(character.style.height) + "px";
                 fallingSpeed = 0;
                 jumping = false;
                 falling = false;
@@ -156,15 +124,16 @@ movecharacter = function() {
         coordinates = wallcollision(newLeft, posTop)
         if (coordinates) {
             count += 1;
-            if (left - newLeft > 0 && coordinates[4] != indexOfTop) {
+            if (left - newLeft > 0 && coordinates[4] != indexOFTOP) {
                 character.style.left = coordinates[3] + "px";
             }
-            if (left - newLeft < 0 && coordinates[4] != indexOfTop) {
-                character.style.left = coordinates[2] - 10 + "px";
+            if (left - newLeft < 0 && coordinates[4] != indexOFTOP) {
+                character.style.left = coordinates[2] - parsePos(character.style.width) + "px";
             }
             character.style.top = newTop + "px"
         }
     }
+
     if (count == 0) {
         character.style.top = newTop + "px";
         character.style.left = newLeft + "px";
@@ -174,6 +143,7 @@ movecharacter = function() {
 parsePos = function(raw) {
     return parseInt(raw.slice(0, -2))
 }
+
 
 platform = function(width, height, x, y) {
     self.width = width;
@@ -228,7 +198,11 @@ function terminalcollision() {
 }
 
 
-
+function winner() {
+  if (collision("end", 0)) {
+    location.reload();
+  }
+}
 function collision(type, add) {
     posTop = parseInt(character.style.top.slice(0, -2));
     left = parseInt(character.style.left.slice(0, -2));
@@ -258,3 +232,32 @@ setInterval(function() {
     }
 
 }, 1000 / 80)
+
+
+
+function style(item, height, width, background, posTop, left) {
+  item.style.height = height + "px";
+  item.style.width = width + "px";
+  item.style.background = background;
+  item.style.position = "absolute";
+  if (top) {
+    item.style.top = posTop + "px";
+    item.style.left = left + "px";
+  }
+}
+
+function append(item) {
+  document.body.appendChild(item)
+}
+
+function hasClass(element, cls) {
+    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+}
+
+function checkTopOf(type) {
+  checkTopsOf.push(type);
+}
+
+function remove(item) {
+  document.body.removeChild(item);
+}
