@@ -1,0 +1,49 @@
+body {
+  background: black;
+}
+#score {
+  color: white;
+  text-align: center;
+}
+#restart {
+  display: block;
+  margin: auto;
+  visibility: hidden;
+}
+#spaceship {
+  background: url("images/spaceship.png");
+  height: 50px;
+  width: 40px;
+  background-position: 0 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+#spaceship2 {
+  background: url("images/ship2.png");
+  height: 50px;
+  width: 40px;
+  background-position: 0 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+.bullet {
+  height: 5px;
+  width: 5px;
+  background: grey;
+  border-radius: 50%;
+  position: absolute;
+}
+.asteroid {
+  height: 100px;
+  width: 100px;
+  background: lightgrey;
+  border-radius: 50%;
+  position: absolute;
+}
+body {
+  overflow: hidden;
+}

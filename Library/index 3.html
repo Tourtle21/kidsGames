@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="style.js"></script>
+  <title>Document</title>
+</head>
+<body>
+	<script>
+    var timer = 100;
+	  setBackground("#F5FFFF")
+    createCharacter("pig", "#660061", "100px", "100px", "20px", "20px");
+    createCharacter("second", "#006666", "100px", "100px", "20px", "140px");
+    createCharacter("purple", "#2E004F", "100px", "100px", "20px", "260px");
+    loop(function() {
+      if (upPressed()){
+        move("pig", "up", 10);
+      }
+      if (downPressed()){
+        move("pig", "down", 10);
+      }
+      if (rightPressed()){
+        move("pig", "right", 10);
+      }
+      if (leftPressed()){
+        move("pig", "left", 10);
+      }
+      if (checkKey("w")){
+        move("second", "up", 10);
+      }
+      if (checkKey("s")){
+        move("second", "down", 10);
+      }
+      if (checkKey("d")){
+        move("second", "right", 10);
+      }
+      if (checkKey("a")){
+        move("second", "left", 10);
+      }
+      if (checkKey("i")){
+        move("purple", "up", 10);
+      }
+      if (checkKey("k")){
+        move("purple", "down", 10);
+      }
+      if (checkKey("l")){
+        move("purple", "right", 10);
+      }
+      if (checkKey("j")){
+        move("purple", "left", 10);
+      }
+
+
+      if (characterWithCharacter("pig", "second") && timer > 100) {
+        timer = 0;
+        if (checkColor("pig") == "rgb(102, 0, 97)"){
+          changeColor("second", "#660061")
+          changeColor("pig", "#8CE8D1")
+        }
+        else if (checkColor("second") == "rgb(102, 0, 97)") {
+          changeColor("second", "#006666")
+          changeColor("pig", "#660061")
+        }
+      }
+      if (characterWithCharacter("pig", "purple") && timer > 100) {
+        timer = 0;
+        if (checkColor("pig") == "rgb(102, 0, 97)"){
+          changeColor("purple", "#660061")
+          changeColor("pig", "#8CE8D1")
+        }
+        else if (checkColor("purple") == "rgb(102, 0, 97)"){
+          changeColor("purple", "#2E004F")
+          changeColor("pig", "#660061")
+        }
+      }
+      if (characterWithCharacter("second", "purple") && timer > 100) {
+        timer = 0;
+        if (checkColor("second") == "rgb(102, 0, 97)"){
+          changeColor("purple", "#660061")
+          changeColor("second", "#006666")
+        }
+        else if (checkColor("purple") == "rgb(102, 0, 97)"){
+          changeColor("purple", "#2E004F")
+          changeColor("second", "#660061")
+        }
+      }
+    timer += 1;
+    }, 10)
+
+
+	</script>
+</body>
+</html>

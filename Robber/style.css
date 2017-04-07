@@ -1,0 +1,43 @@
+body {
+  background: url(http://vignette2.wikia.nocookie.net/finalfantasy/images/f/ff/FFV_Forest_SNES_BG.PNG/revision/latest?cb=20111221070808);
+  background-size: 100% 100%;
+  overflow: hidden;
+}
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+}
+#loadScreen {
+  height: 100%;
+  text-align: center;
+}
+#title {
+  font-size: 50px;
+  color: orange;
+  position: relative;
+  top: 50%;
+}
+#play {
+  background: orange;
+  border: 4px solid darkorange;
+  position: relative;
+  top: 200px;
+}
+.enemy {
+  background: url(http://www.feplanet.net/media/sprites/8/battle/sheets/enemy/gheb_warrior_bow.gif);
+    background-size: 1000px 1000px;
+    background-position: -11px -66px;
+    height: 120px;
+    width: 70px;
+    position: absolute;
+    top: 73%;
+    left: 46%;
+}
+#character {
+  height: 100px;
+  width: 75px;
+  background: blue;
+  position: absolute;
+}

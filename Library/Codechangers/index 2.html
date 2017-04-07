@@ -1,0 +1,189 @@
+<DOCTYPE html>
+  <html>
+	<head>
+		<style>
+		canvas {
+			border:1px solid #d3d3d3;
+			background-color: #f1f1f1;
+		}
+        </style>
+	</head>
+	<body onload="startGame()">
+		<script>
+		var purpleGamePiece;
+		var myScore;
+		var myWalls = [];
+		var minHeight = 28;
+		var maxHeight = 200;
+		var minGap = 50;
+		var maxGap = 200;
+
+		function startGame() {
+			purpleGamePiece = new component(30, 30, "purple", 10, 120, "image");
+			myScore = new component("20px", "arial", "rgb(0, 0, 0)", 280, 40, "text");
+			myGameArea.start();
+		}
+
+		function everyInterval(n) {
+			if ((myGameArea.frameNo / n) % 1 == 0) { return true; }
+			return false;
+		}
+
+		var myGameArea = {
+			canvas : document.createElement("canvas"),
+			start : function() {
+				this.canvas.width = 480;
+				this.canvas.height = 270;
+				this.context = this.canvas.getContext("2d");
+				document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+				this.frameNo = 0;
+				this.interval = setInterval(updateGameArea, 20)
+			},
+			clear : function() {
+				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+			},
+			stop: function() {
+				clearInterval(this.interval)
+			},
+		}
+
+		function component(width, height, color, x, y, type) {
+			this.type = type;
+			this.width = width;
+			this.height = height;
+			this.speedX = 0;
+			this.speedY = 0;
+			this.x = x;
+			this.y = y;
+			if (this.type == "image") {
+				this.image = new Image();
+				this.image.src = color;
+			}
+				this.update = function() {
+				ctx = myGameArea.context;
+				if (this.type == "text") {
+					ctx.font = this.width + " " + this.height;
+					ctx.fillStyle = color;
+					ctx.fillText(this.text, this.x, this.y);
+				} else if (this.type == "image") {
+					ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+				} else {
+				ctx.fillStyle = color;
+				ctx.fillRect(this.x, this.y, this.width, this.height);
+				}
+			}
+			this.newPos = function() {
+				this.x += this.speedX;
+				this.y += this.speedY;
+			}
+			this.crashWith = function(otherObj) {
+				var myLeft = this.x;
+				var myRight = this.x + (this.width);
+				var myTop = this.y;
+				var myBottom = this.y + (this.height)
+				var otherLeft = otherObj.x;
+				var otherRight = otherObj.x + (otherObj.width);
+				var otherTop = otherObj.y;
+				var otherBottom = otherObj.y + (otherObj.height);
+				var crash = true;
+				if (
+					(myBottom < otherTop) ||
+					(myTop > otherBottom) ||
+					(myRight < otherLeft) ||
+					(myLeft > otherRight)
+					){
+					crash = false;
+			}
+			return crash;
+		}
+		}
+
+		function updateGameArea() {
+			var x,y;
+			for (i = 0; i < myWalls.length; i ++){
+			if (purpleGamePiece.crashWith(myWalls[i])) {
+				myGameArea.stop();
+				return;
+
+			}
+	}
+			myGameArea.clear();
+			myGameArea.frameNo++;
+
+
+			if (myGameArea.frameNo == 1 || everyInterval(150)) {
+				x = myGameArea.canvas.width;
+				// y = myGameArea.canvas.height - 200;
+				height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
+				gap = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
+				myWalls.push(new component(10, height, "green", x, 0));
+				myWalls.push(new component(10, x - height - gap, "green", x, height + gap));
+			}
+
+			for (i = 0; i < myWalls.length; i++) {
+				myWalls[i].x--;
+				myWalls[i].update();
+			}
+
+			myScore.text = "SCORE: " + myGameArea.frameNo;
+			myScore.update();
+
+			purpleGamePiece.update();
+			purpleGamePiece.newPos();
+		}
+
+
+
+
+		function moveUp() {
+			purpleGamePiece.speedY = -2;
+		}
+		function moveDown() {
+			purpleGamePiece.speedY = 2;
+		}
+		function moveRight() {
+			purpleGamePiece.speedX = 2;
+		}
+		function moveLeft() {
+			purpleGamePiece.speedX = -2;
+		}
+		function moveStop() {
+			purpleGamePiece.speedY = 0;
+			purpleGamePiece.speedX = 0;
+		}
+
+		document.addEventListener("keydown",function(e){
+			if (e.keyCode == 39) { //right
+				moveRight();
+			} else if (e.keyCode == 37){ //left
+				moveLeft();
+			} else if (e.keyCode == 40) { // down
+				moveDown();
+			} else if (e.keyCode == 38) { //up
+				moveUp();
+			}
+			console.log(e.keyCode);
+		});
+		document.addEventListener("keyup",function(e){
+			if (e.keyCode == 39) { //right
+				moveStop();
+			} else if (e.keyCode == 37){ //left
+				moveStop();
+			} else if (e.keyCode == 40) { // down
+				moveStop();
+			} else if (e.keyCode == 38) { //up
+				moveStop();
+			}
+		});
+
+
+       </script>
+       <div>
+       	<button onmouseup="moveStop()" onmousedown="moveUp()">UP</button>
+       	<button onmouseup="moveStop()"onmousedown="moveDown()">DOWN</button>
+       	<button onmouseup="moveStop()"onmousedown="moveLeft()">LEFT</button>
+       	<button onmouseup="moveStop()"onmousedown="moveRight()">RIGHT</button>
+       	<button onclick="moveStop()">STOP</button>
+       </div>
+    </body>
+  </html>
